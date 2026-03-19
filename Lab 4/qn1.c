@@ -76,17 +76,13 @@ int main() {
     D = (Dplus_max > Dminus_max) ? Dplus_max : Dminus_max;
 
     // Display results
-    printf("\n\nD+ values:\n");
+    printf("\n\n|  i  |   R[i]   |   D+    |   D-    |\n");
+    printf("----------------------------------------\n");
     for(i = 0; i < N; i++) {
-        printf("%.3f ", Dplus[i]);
+        printf("| %3d | %7.3f | %7.3f | %7.3f |\n", i+1, R[i], Dplus[i], Dminus[i]);
     }
-
-    printf("\nD- values:\n");
-    for(i = 0; i < N; i++) {
-        printf("%.3f ", Dminus[i]);
-    }
-
-    printf("\n\nD+ max = %.3f", Dplus_max);
+    printf("----------------------------------------\n");
+    printf("\nD+ max = %.3f", Dplus_max);
     printf("\nD- max = %.3f", Dminus_max);
     printf("\nD = %.3f", D);
 

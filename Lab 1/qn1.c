@@ -2,9 +2,6 @@
 // Activity 1:
 // a) calculate the value of pi using monte carlo method
 // b) calculate the error percentage
-// c) Repeat the experiment for at least five different values of input iterations and tabulate the true value, the experiment's output, and the error percentage for each.
-
-
 
 //  Algorithm:
 //  1. Initialize circle_points and square_points, interval to zero
@@ -26,50 +23,36 @@
 #define SEED 35791246
 
 int main() {
-    int n, i, j;
-    int iterations[100];
-    double pi[100], error[100];
+    int i, iterations;
+    int square_point = 0, circle_point = 0;
+    double x, y, z;
+    double pi, error;
     double trueValueOfPI = 3.141592;
 
-    printf("Enter number of different iteration inputs: ");
-    scanf("%d", &n);
-
-    for(i = 0; i < n; i++) {
-        printf("Enter iteration value %d: ", i+1);
-        scanf("%d", &iterations[i]);
-    }
+    printf("Enter number of iterations: ");
+    scanf("%d", &iterations);
 
     srand(SEED);
 
+    for(i = 0; i < iterations; i++) {
+        x = (double)rand() / RAND_MAX;
+        y = (double)rand() / RAND_MAX;
 
-    for(i = 0; i < n; i++) {
-        int square_point = 0, circle_point = 0;
-        double x, y, z;
+        z = x*x + y*y;
 
-        for(j = 0; j < iterations[i]; j++) {
-            x = (double)rand() / RAND_MAX;
-            y = (double)rand() / RAND_MAX;
+        if(z <= 1)
+            circle_point++;
 
-            z = x*x + y*y;
-
-            if(z <= 1)
-                circle_point++;
-
-            square_point++;
-        }
-
-        pi[i] = 4 * ((double)circle_point / (double)square_point);
-        error[i] = fabs((trueValueOfPI - pi[i]) / trueValueOfPI) * 100;
+        square_point++;
     }
 
-    printf("\n");
-    printf("Iterations\tTrue PI\t\tEstimated PI\tError Percentage\n");
-    printf("\n");
+    pi = 4 * ((double)circle_point / square_point);
 
-    for(i = 0; i < n; i++) {
-        printf("%d\t\t%lf\t%lf\t%.2lf\n",
-               iterations[i], trueValueOfPI, pi[i], error[i]);
-    }
+    error = fabs((trueValueOfPI - pi) / trueValueOfPI) * 100;
+
+    printf("\nEstimated Value of PI = %lf\n", pi);
+    printf("True Value of PI = %lf\n", trueValueOfPI);
+    printf("Error Percentage = %.4lf%%\n", error);
 
     return 0;
 }

@@ -1,47 +1,55 @@
-// Use monte carlo method to calcuate the probability of getting 3 ,6 or 9 heads in tossing of coin 10 times.
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
- int main()
- {
-     int j,count=0, limit, i=0,head, tail;
-     float y, answer, h=2.5;
-        printf("Enter the number of iterations: ");
-        scanf("%d", &limit);
-        while(i<=limit)
-        {
-            i++;
-            head=0;
-            tail=0;
-            for(j=0; j<10; j++)
-            {
-                y=(float)((rand()%65535)/65535.0f)*10;
-                if(y<h)
-                {
-                    head++;
-                }
-                else
-                {
-                    tail++;
-                }
-            }
-            if(head==3 || head==6 || head==9)
-            {
-                count++;
-            }
+// c) Repeat the experiment for at least five different values of input iterations and tabulate the true value, the experiment's output, and the error percentage for each.
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<time.h>
+
+#define SEED 35791246
+
+int main() {
+    int n, i, j;
+    int iterations[100];
+    double pi[100], error[100];
+    double trueValueOfPI = 3.141592;
+
+    printf("Enter number of different iteration inputs: ");
+    scanf("%d", &n);
+
+    for(i = 0; i < n; i++) {
+        printf("Enter iteration value %d: ", i+1);
+        scanf("%d", &iterations[i]);
+    }
+
+    srand(SEED);
+
+    for(i = 0; i < n; i++) {
+        int square_point = 0, circle_point = 0;
+        double x, y, z;
+
+        for(j = 0; j < iterations[i]; j++) {
+            x = (double)rand() / RAND_MAX;
+            y = (double)rand() / RAND_MAX;
+
+            z = x*x + y*y;
+
+            if(z <= 1)
+                circle_point++;
+
+            square_point++;
         }
-            answer=(float)count/limit;
-            
-            // Theoretical probability: P(3 heads) + P(6 heads) + P(9 heads)
-            // Using binomial: C(10,3)*0.5^10 + C(10,6)*0.5^10 + C(10,9)*0.5^10
-            double theoretical = (120.0 + 210.0 + 10.0) / 1024.0;  // (C(10,3) + C(10,6) + C(10,9)) / 2^10
-            
-            // Calculate error percentage
-            double error = fabs((answer - theoretical) / theoretical) * 100.0;
-            
-            printf("The limit is %d\n", limit);
-            printf("Experimental probability: %f\n", answer);
-            printf("Theoretical probability: %f\n", theoretical);
-            printf("Error percentage: %f%%\n", error);
+
+        pi[i] = 4 * ((double)circle_point / square_point);
+        error[i] = fabs((trueValueOfPI - pi[i]) / trueValueOfPI) * 100;
+    }
+
+    printf("\nIterations\tTrue PI\t\tEstimated PI\tError (%%)\n");
+    printf("-----------------------------------------------------------\n");
+
+    for(i = 0; i < n; i++) {
+        printf("%d\t\t%.6lf\t%.6lf\t%.4lf\n",
+               iterations[i], trueValueOfPI, pi[i], error[i]);
+    }
+
     return 0;
 }
